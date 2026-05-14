@@ -1,0 +1,57 @@
+import Link from "next/link";
+
+export default function DatosEstructurados() {
+  return (
+    <div className="max-w-3xl mx-auto px-4 py-10">
+      <div className="mb-6">
+        <Link href="/" className="text-sm text-blue-600 hover:underline">← Inicio</Link>
+        <h1 className="text-3xl font-bold text-[#1e3a5f] mt-2">Datos Estructurados</h1>
+        <p className="text-slate-500 mt-1">Contenido teórico en preparación</p>
+      </div>
+
+      <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-10 text-center">
+        <div className="text-6xl mb-4">📊</div>
+        <h2 className="text-2xl font-bold text-[#1e3a5f] mb-3">Próximamente</h2>
+        <p className="text-slate-500 mb-2 text-base">
+          El contenido de la asignatura <strong>Datos Estructurados</strong> estará disponible próximamente.
+        </p>
+        <p className="text-slate-400 text-sm mb-8">
+          Esta asignatura cubrirá temas como bases de datos relacionales, SQL avanzado, modelado de datos, pipelines ETL, almacenes de datos y análisis estadístico de datos estructurados.
+        </p>
+
+        <div className="bg-slate-50 rounded-lg border border-dashed border-slate-300 p-6 mb-8 text-left">
+          <h3 className="font-semibold text-slate-700 mb-3 text-sm">Contenido previsto:</h3>
+          <ul className="space-y-2 text-sm text-slate-600">
+            <li className="flex items-center gap-2">
+              <span className="w-2 h-2 bg-slate-300 rounded-full"></span>
+              Fundamentos de bases de datos relacionales
+            </li>
+            <li className="flex items-center gap-2">
+              <span className="w-2 h-2 bg-slate-300 rounded-full"></span>
+              SQL avanzado y optimización de consultas
+            </li>
+            <li className="flex items-center gap-2">
+              <span className="w-2 h-2 bg-slate-300 rounded-full"></span>
+              Modelado y normalización de datos
+            </li>
+            <li className="flex items-center gap-2">
+              <span className="w-2 h-2 bg-slate-300 rounded-full"></span>
+              Pipelines ETL y almacenes de datos (Data Warehouses)
+            </li>
+            <li className="flex items-center gap-2">
+              <span className="w-2 h-2 bg-slate-300 rounded-full"></span>
+              Análisis estadístico y visualización
+            </li>
+          </ul>
+        </div>
+
+        <Link
+          href="/"
+          className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2.5 rounded-lg transition-colors"
+        >
+          Volver al inicio
+        </Link>
+      </div>
+    </div>
+  );
+}
