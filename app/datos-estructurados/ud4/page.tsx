@@ -20,158 +20,158 @@ export default function UD4() {
       </div>
 
       <div className="bg-indigo-50 border border-indigo-200 rounded-xl p-4 mb-8 text-sm text-indigo-800">
-        <strong>Temas:</strong> 1. Regresión OLS con residuos correlacionados · 2. Test de autocorrelación residual · 3. Procedimiento de 3 pasos · 4. Modelo ARIMAX
+        <strong>Temas:</strong> 1. Modelos de regresión con errores de ST · 2. Procedimiento de 4 pasos · 3. Caso práctico: tasas de interés de EE.UU. · 4. Modelo ARIMAX
       </div>
 
       <article className="prose bg-white rounded-xl border border-slate-200 shadow-sm p-8 space-y-2">
 
         <h2>Introducción</h2>
         <p>
-          En muchos problemas prácticos queremos relacionar una serie temporal Y_t con una o varias variables explicativas X_t mediante regresión lineal. Sin embargo, cuando los datos son series temporales, los <strong>residuos de la regresión suelen estar autocorrelacionados</strong>, violando uno de los supuestos fundamentales de los Mínimos Cuadrados Ordinarios (OLS).
+          Los modelos ARIMA que hemos estudiado hasta ahora <strong>intentan explicar el futuro de una variable basándose en su propio pasado</strong>. Parece lógico tratar de explicar y predecir con mayor precisión usando también el presente y pasado de <em>otras variables explicativas</em>.
         </p>
         <p>
-          Ignorar esta autocorrelación tiene consecuencias graves: los estimadores OLS siguen siendo insesgados pero ya no son BLUE (Best Linear Unbiased Estimators), los errores estándar estimados son incorrectos (generalmente subestimados), y los tests t y F no son válidos. El resultado es una falsa sensación de precisión estadística que puede llevar a conclusiones erróneas.
+          La técnica para abordar esto son los <strong>modelos de regresión con errores de series temporales</strong>. El modelo base es:
         </p>
-
-        <h2>Tema 1: El Problema de la Autocorrelación en Residuos</h2>
-
-        <h3>1.1 Modelo de regresión con errores ST</h3>
+        <div className="formula">y_t = α + β·x_t + e_t</div>
         <p>
-          Consideramos el modelo:
-        </p>
-        <div className="formula">Y_t = β₀ + β₁X₁_t + β₂X₂_t + ··· + β_kX_k_t + ε_t</div>
-        <p>
-          Si los errores ε_t siguen un proceso ARMA, los supuestos de OLS (errores i.i.d.) se violan. El error puede tener una estructura AR(1): ε_t = ρ·ε_{"{t-1}"} + a_t, donde a_t ~ WN(0, σ²).
+          donde y_t y x_t son dos series temporales y e_t es el término de error.
         </p>
 
-        <h3>1.2 Consecuencias de ignorar la autocorrelación</h3>
-        <ul>
-          <li><strong>Estimadores β insesgados</strong> pero ineficientes</li>
-          <li><strong>Errores estándar subestimados:</strong> los t-ratios están inflados artificialmente</li>
-          <li><strong>Tests F no válidos:</strong> podemos rechazar H₀ cuando es cierta (error tipo I inflado)</li>
-          <li><strong>Intervalos de confianza demasiado estrechos:</strong> sobreestimamos la precisión</li>
-          <li><strong>R² sobreestimado</strong> si no se corrige correctamente</li>
-        </ul>
+        <h2>Tema 1: El Problema de la Correlación Serial</h2>
 
-        <h3>1.3 Test de Durbin-Watson</h3>
+        <h3>1.1 Consecuencias de ignorar la autocorrelación</h3>
         <p>
-          El <strong>test de Durbin-Watson</strong> detecta autocorrelación de primer orden (AR(1)) en los residuos:
+          Si e_t es Ruido Blanco, el método de mínimos cuadrados ordinarios (OLS) produce estimaciones <strong>consistentes</strong> para α y β.
         </p>
-        <div className="formula">DW = Σ(ê_t − ê_{"{t-1}"})² / Σê_t²  ≈  2(1 − ρ̂)</div>
         <p>
-          Donde ρ̂ es la autocorrelación muestral de primer orden. El estadístico DW toma valores en [0, 4]:
+          Sin embargo, si e_t está <strong>correlacionado en serie</strong>, las estimaciones de α y β pueden <strong>no ser consistentes</strong>: aunque aumente el tamaño muestral n, el estimador no converge al valor real del parámetro.
+        </p>
+
+        <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 text-sm text-blue-900">
+          <strong>Consistencia:</strong> Un estimador θ̂_n es consistente si lim_{"{n→∞}"} P(|θ̂_n − θ| {"< ε"}) = 1 para todo ε {">"} 0. Es decir, con suficientes datos el estimador converge en probabilidad al valor real del parámetro.
+        </div>
+
+        <h3>1.2 ¿Por qué e_t tiene autocorrelación?</h3>
+        <p>
+          En muchas aplicaciones reales el error e_t <strong>sí muestra autocorrelación</strong>, es decir, tiene memoria: el error actual depende de errores pasados. Esto es habitual en:
         </p>
         <ul>
-          <li><strong>DW ≈ 2:</strong> sin autocorrelación (ρ ≈ 0)</li>
-          <li><strong>DW &lt; 2:</strong> autocorrelación positiva (ρ &gt; 0)</li>
-          <li><strong>DW &gt; 2:</strong> autocorrelación negativa (ρ &lt; 0)</li>
+          <li>Series financieras (tasas de interés, tipos de cambio)</li>
+          <li>Series económicas (PIB, inflación, desempleo)</li>
+          <li>Cualquier serie donde los factores omitidos persisten en el tiempo</li>
         </ul>
         <p>
-          También se usa el <strong>test de Ljung-Box</strong> sobre los residuos para detectar autocorrelación en múltiples retardos simultáneamente.
+          Por eso usamos modelos como <strong>MA(1)</strong> para los errores:
+        </p>
+        <div className="formula">e_t = a_t + θ·a_{"{t-1}"}</div>
+
+        <h2>Tema 2: a_t vs e_t — La Innovación</h2>
+
+        <div className="bg-slate-50 border border-slate-200 rounded-xl p-5">
+          <h3 className="mt-0">¿Por qué no modelamos e_t directamente como Ruido Blanco?</h3>
+          <p>
+            Porque en muchos casos e_t tiene memoria (autocorrelación). Entonces la solución es encontrar la parte "verdaderamente aleatoria" dentro de e_t.
+          </p>
+          <p>En el modelo: <code>e_t = a_t + θ·a_{"{t-1}"}</code></p>
+          <ul>
+            <li><strong>a_t</strong> es el <strong>verdadero ruido aleatorio</strong> (la innovación): representa un shock económico puro, un error de medición. Cumple: E[a_t] = 0, Var(a_t) = σ²_a, Cov(a_t, a_{"{t-k}"}) = 0 para todo k ≠ 0.</li>
+            <li><strong>e_t</strong> es el <strong>error observado</strong>: mezcla el ruido puro a_t con la influencia del pasado. Por eso e_t no es WN aunque a_t sí lo sea.</li>
+          </ul>
+          <p className="mb-0">a_t es "lo más puro de lo aleatorio", el ruido base que genera el comportamiento de e_t.</p>
+        </div>
+
+        <h2>Tema 3: Procedimiento de 4 Pasos</h2>
+        <p>
+          Los pasos para analizar modelos de regresión lineal con errores de series temporales son:
         </p>
 
-        <h2>Tema 2: Procedimiento de 3 Pasos</h2>
+        <h3>Paso 1: Ajustar OLS y verificar correlación serial de los residuos</h3>
         <p>
-          La solución estándar para regresión con errores de series temporales es un <strong>procedimiento iterativo de 3 pasos</strong>:
+          Se estima el modelo de regresión por OLS en la escala original y se analizan los residuos ê_t: ACF, PACF y test de Dickey-Fuller para verificar si son estacionarios.
         </p>
 
-        <h3>Paso 1: Ajustar el modelo de regresión OLS</h3>
-        <p>
-          Se estima el modelo de regresión por OLS obteniendo los residuos ê_t:
-        </p>
-        <div className="formula">ê_t = Y_t − β̂₀ − β̂₁X₁_t − ··· − β̂_kX_k_t</div>
-        <p>
-          A continuación se verifica si los residuos presentan autocorrelación mediante el test de Durbin-Watson y/o el ACF de los residuos.
-        </p>
-
-        <h3>Paso 2: Modelar la estructura de los errores con ARIMA</h3>
-        <p>
-          Si se detecta autocorrelación, se analiza la estructura del proceso de error usando la metodología Box-Jenkins sobre los residuos ê_t:
-        </p>
-        <ul>
-          <li>Examinar ACF y PACF de ê_t para identificar el orden del proceso ARIMA</li>
-          <li>Si la ACF decae y la PACF se corta tras lag 1 → errores AR(1)</li>
-          <li>Si la PACF decae y la ACF se corta tras lag 1 → errores MA(1)</li>
-        </ul>
+        <h3>Paso 2: ¿Son estacionarios los residuos?</h3>
+        <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 text-sm">
+          <p className="font-semibold text-amber-800 mb-2">Bifurcación clave:</p>
+          <ul className="mb-0">
+            <li><strong>Si los residuos NO son estacionarios:</strong> tomar la <strong>primera diferencia tanto de la variable dependiente como de las explicativas</strong> y volver al Paso 1.</li>
+            <li><strong>Si los residuos SÍ son estacionarios:</strong> identificar un modelo ARMA para los residuos (usando ACF y PACF) y modificar el modelo de regresión lineal en consecuencia.</li>
+          </ul>
+        </div>
 
         <h3>Paso 3: Estimación conjunta por Máxima Verosimilitud (MLE)</h3>
         <p>
-          Se estima el modelo completo de forma <strong>conjunta</strong> por MLE, estimando simultáneamente los parámetros de regresión β y los parámetros del proceso de error φ, θ:
-        </p>
-        <div className="formula">Y_t = β₀ + β₁X_t + ε_t, donde ε_t sigue ARIMA(p,d,q)</div>
-        <p>
-          La estimación conjunta es más eficiente que la estimación en dos etapas (Cochrane-Orcutt), especialmente cuando los parámetros AR/MA son grandes.
+          Realizar una estimación conjunta de los parámetros de regresión (α, β) y los parámetros del modelo de errores (θ) mediante MLE. Verificar el modelo ajustado para posibles mejoras.
         </p>
 
-        <h2>Tema 3: Caso Práctico — Regresión entre Tasas de Cambio</h2>
-
-        <h3>3.1 Descripción del problema</h3>
+        <h3>Paso 4: Pronóstico</h3>
         <p>
-          Se estudia la relación lineal entre dos tasas de cambio de divisas. El modelo de regresión teórico es:
-        </p>
-        <div className="formula">c_{"{3,t}"} = β₀ + β₁ · c_{"{1,t}"} + ε_t</div>
-        <p>
-          donde c_{"{3,t}"} y c_{"{1,t}"} son series de rendimientos de dos pares de divisas.
+          Una vez que los residuos del modelo conjunto sean Ruido Blanco (WN), el modelo está listo para hacer pronósticos.
         </p>
 
-        <h3>3.2 Diagnóstico de residuos OLS</h3>
+        <h2>Tema 4: Caso Práctico — Tasas de Interés Semanales de EE.UU.</h2>
+
+        <h3>4.1 Descripción</h3>
         <p>
-          Tras el ajuste OLS inicial, el análisis de residuos revela:
+          Se estudia la relación entre dos series semanales de tasas de interés de bonos del Tesoro de EE.UU.:
         </p>
         <ul>
-          <li>La ACF de los residuos muestra un pico significativo en el lag 1</li>
-          <li>La PACF decae geométricamente</li>
-          <li>→ Sugiere estructura MA(1) en los errores</li>
+          <li><strong>r_{"{1,t}"}</strong>: tasa de madurez constante a 1 año</li>
+          <li><strong>r_{"{3,t}"}</strong>: tasa de madurez constante a 3 años</li>
         </ul>
+        <p>La correlación entre ambas series es <strong>0.9823</strong>.</p>
 
-        <h3>3.3 Modelo final estimado por MLE</h3>
+        <h3>4.2 Paso 1 — OLS en niveles</h3>
+        <p>El modelo OLS estimado es:</p>
+        <div className="formula">r_{"{3,t}"} = 0.832 + 0.93·r_{"{1,t}"} + e_t</div>
+        <p>R² = 96.49%, error estándar = 0.5228. Sin embargo, los residuos son <strong>claramente no estacionarios</strong> (la ACF decae muy lentamente) y el test ADF sugiere raíz unitaria. Las dos tasas no están cointegradas.</p>
+
+        <h3>4.3 Paso 2 — Diferenciar ambas variables</h3>
         <p>
-          El modelo final estimado de forma conjunta es:
+          Como los residuos no son estacionarios, se toma la primera diferencia de ambas series:
         </p>
-        <div className="formula">c_{"{3,t}"} = 0.794 · c_{"{1,t}"} + e_t</div>
-        <div className="formula">e_t = a_t + 0.1823 · a_{"{t-1}"}</div>
+        <div className="formula">c_{"{1,t}"} = (1 − L)·r_{"{1,t}"} = r_{"{1,t}"} − r_{"{1,t-1}"}</div>
+        <div className="formula">c_{"{3,t}"} = (1 − L)·r_{"{3,t}"} = r_{"{3,t}"} − r_{"{3,t-1}"}</div>
         <p>
-          donde a_t ~ WN(0, σ²). La interpretación es:
+          La correlación entre los cambios ahora es <strong>0.9084</strong>. El nuevo modelo OLS sobre los cambios:
         </p>
-        <ul>
-          <li>β₁ = 0.794: cada unidad adicional en c₁ se asocia con 0.794 unidades en c₃</li>
-          <li>θ₁ = 0.1823: el choque del periodo anterior tiene un efecto positivo de 0.18 sobre el error actual</li>
-        </ul>
-
-        <h3>3.4 Validación del modelo</h3>
+        <div className="formula">c_{"{3,t}"} = 0.794·c_{"{1,t}"} + e_t</div>
         <p>
-          El test de Ljung-Box sobre los residuos del modelo conjunto muestra un p-valor &gt; 0.05: los residuos a_t son Ruido Blanco, confirmando que el modelo captura adecuadamente la estructura de dependencia.
+          R² = 85.5%, error estándar = 0.06. La ACF de los residuos muestra un pico significativo en lag 1, lo que sugiere un modelo <strong>MA(1)</strong> para los errores.
+        </p>
+        <p>
+          El error no es WN, lo que significa que queda estructura en e_t que no está siendo explicada por x_t. Esa estructura es autocorrelación: los errores actuales dependen de errores pasados.
         </p>
 
-        <h2>Tema 4: Modelo ARIMAX</h2>
-
-        <h3>4.1 Definición</h3>
+        <h3>4.4 Paso 3 — Estimación conjunta MLE</h3>
         <p>
-          El modelo <strong>ARIMAX</strong> (ARIMA with eXogenous variables) es una generalización natural que incorpora variables explicativas externas (exógenas) dentro de un modelo ARIMA:
+          Estimando conjuntamente con errores MA(1), el modelo final es:
+        </p>
+        <div className="formula">c_{"{3,t}"} = 0.794·c_{"{1,t}"} + e_t</div>
+        <div className="formula">e_t = a_t + 0.1823·a_{"{t-1}"}, con σ_a = 0.0678</div>
+        <p>
+          Deshaciendo las diferencias, el modelo en niveles equivalente es:
+        </p>
+        <div className="formula">r_{"{3,t}"} = r_{"{3,t-1}"} + 0.794·(r_{"{1,t}"} − r_{"{1,t-1}"}) + a_t + 0.182·a_{"{t-1}"}</div>
+        <p>
+          <strong>La serie de interés puede ser explicada por su propio pasado y por el presente y pasado de otra serie.</strong> Este es un ejemplo de modelo <strong>ARIMAX</strong> (AutoRegressive Integrated Moving Average with eXogenous variables).
+        </p>
+
+        <h2>Tema 5: Modelo ARIMAX</h2>
+        <p>
+          ARIMAX es la generalización natural: incorpora variables externas (exógenas) dentro de un modelo ARIMA. La forma general es:
         </p>
         <div className="formula">φ(B)·Δ^d·Y_t = β₁X_{"{1,t}"} + ··· + β_kX_{"{k,t}"} + θ(B)·ε_t</div>
-        <p>
-          También conocido como modelo de <strong>función de transferencia</strong> cuando el efecto de X sobre Y puede tener retardos dinámicos.
-        </p>
 
-        <h3>4.2 Ventajas del ARIMAX</h3>
-        <ul>
-          <li>Combina el poder predictivo de variables externas con la modelización de la estructura temporal</li>
-          <li>Los coeficientes β tienen interpretación causal (bajo condiciones de exogeneidad)</li>
-          <li>Corrige la inferencia incorrecta de OLS en presencia de autocorrelación</li>
-          <li>Es la base de los modelos VAR (Vector Autoregression) para sistemas multivariantes</li>
-        </ul>
-
-        <h3>4.3 Comparación de enfoques</h3>
         <table>
           <thead>
-            <tr><th>Enfoque</th><th>Trata autocorrelación</th><th>Variables externas</th><th>Eficiencia</th></tr>
+            <tr><th>Enfoque</th><th>Trata autocorrelación</th><th>Variables externas</th><th>Consistencia</th></tr>
           </thead>
           <tbody>
-            <tr><td>OLS clásico</td><td>No</td><td>Sí</td><td>Baja (si hay autocorrelación)</td></tr>
-            <tr><td>Procedimiento 3 pasos</td><td>Sí</td><td>Sí</td><td>Buena</td></tr>
+            <tr><td>OLS clásico</td><td>No</td><td>Sí</td><td>Solo si e_t = WN</td></tr>
+            <tr><td>Procedimiento 4 pasos</td><td>Sí</td><td>Sí</td><td>Buena</td></tr>
             <tr><td>ARIMAX (MLE conjunto)</td><td>Sí</td><td>Sí</td><td>Óptima</td></tr>
-            <tr><td>ARIMA puro</td><td>Sí</td><td>No</td><td>Óptima (sin variables externas)</td></tr>
+            <tr><td>ARIMA puro</td><td>Sí</td><td>No</td><td>Óptima (sin vars externas)</td></tr>
           </tbody>
         </table>
 

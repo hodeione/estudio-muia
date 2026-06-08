@@ -20,7 +20,7 @@ export default function UD2() {
       </div>
 
       <div className="bg-indigo-50 border border-indigo-200 rounded-xl p-4 mb-8 text-sm text-indigo-800">
-        <strong>Temas:</strong> 1. Modelos AR(p), MA(q) y ARMA(p,q) · 2. ARIMA(p,d,q) y diferenciación · 3. Metodología Box-Jenkins · 4. Criterios de selección AIC/BIC
+        <strong>Temas:</strong> 1. Modelos AR(p), MA(q) y ARMA(p,q) · 2. ARIMA(p,d,q) y diferenciación · 3. Metodología Box-Jenkins
       </div>
 
       <article className="prose bg-white rounded-xl border border-slate-200 shadow-sm p-8 space-y-2">
@@ -158,41 +158,6 @@ export default function UD2() {
         <div className="formula">Ŷ_{"{T+h}"} ± 1.96 · σ_h</div>
         <p>
           donde σ_h es la desviación estándar del error de predicción h pasos adelante, que crece con h (mayor incertidumbre en el horizonte lejano).
-        </p>
-
-        <h2>Tema 4: Criterios de Selección AIC y BIC</h2>
-
-        <p>
-          Cuando hay varios modelos candidatos, se utilizan <strong>criterios de información</strong> para seleccionar el más parsimonioso (que equilibra bondad de ajuste y complejidad):
-        </p>
-
-        <h3>4.1 Criterio de Información de Akaike (AIC)</h3>
-        <div className="formula">AIC = −2 · log(L̂) + 2k</div>
-        <p>
-          donde L̂ es la verosimilitud maximizada y k = p + q + 1 es el número de parámetros. Se penaliza la complejidad con 2k. Se selecciona el modelo con <strong>menor AIC</strong>.
-        </p>
-
-        <h3>4.2 Criterio de Información Bayesiano (BIC)</h3>
-        <div className="formula">BIC = −2 · log(L̂) + k · log(n)</div>
-        <p>
-          El BIC usa una penalización más fuerte que el AIC (log(n) vs 2), lo que favorece modelos más simples. Asintóticamente consistente: selecciona el modelo verdadero con probabilidad 1 cuando n → ∞.
-        </p>
-
-        <h4>AIC vs BIC: ¿cuál usar?</h4>
-        <table>
-          <thead>
-            <tr><th>Criterio</th><th>Penalización</th><th>Tendencia</th><th>Recomendado cuando</th></tr>
-          </thead>
-          <tbody>
-            <tr><td>AIC</td><td>2k</td><td>Modelos más complejos</td><td>El objetivo es predecir</td></tr>
-            <tr><td>BIC</td><td>k·log(n)</td><td>Modelos más simples</td><td>El objetivo es identificar el modelo verdadero</td></tr>
-          </tbody>
-        </table>
-
-        <h3>4.3 AICc — AIC corregido para muestras pequeñas</h3>
-        <div className="formula">AICc = AIC + 2k(k+1) / (n−k−1)</div>
-        <p>
-          El AICc es preferible cuando el tamaño muestral n es pequeño relativo al número de parámetros k. Converge al AIC cuando n → ∞.
         </p>
 
       </article>

@@ -9,7 +9,7 @@ const uds = [
   {
     n: 2,
     title: "Modelos ARIMA y Metodología Box-Jenkins",
-    temas: ["Modelos AR(p), MA(q) y ARMA(p,q)", "ARIMA(p,d,q) y diferenciación", "Metodología Box-Jenkins (5 pasos)", "Criterios AIC y BIC"],
+    temas: ["Modelos AR(p), MA(q) y ARMA(p,q)", "ARIMA(p,d,q) y diferenciación", "Metodología Box-Jenkins (5 pasos)"],
   },
   {
     n: 3,
@@ -19,7 +19,7 @@ const uds = [
   {
     n: 4,
     title: "Regresión con Errores de Series Temporales",
-    temas: ["Regresión OLS con residuos correlacionados", "Procedimiento de 3 pasos", "Estimación conjunta por MLE", "Modelo ARIMAX"],
+    temas: ["Regresión con errores de ST", "Procedimiento de 4 pasos", "Caso práctico: tasas de interés EE.UU.", "Modelo ARIMAX"],
   },
   {
     n: 5,
