@@ -13,11 +13,11 @@ const subjects = [
   {
     id: "datos-estructurados",
     title: "Datos Estructurados",
-    subtitle: "Próximamente",
-    status: "soon",
-    color: "bg-slate-400",
-    uds: 0,
-    description: "Contenido en preparación",
+    subtitle: "Series Temporales, Prophet, GARCH, Recomendadores",
+    status: "active",
+    color: "bg-indigo-600",
+    uds: 9,
+    description: "ARIMA, SARIMA, Prophet, GARCH, Redes Neuronales, Sistemas Recomendadores y VaR",
   },
   {
     id: "calibracion-metricas",
@@ -89,6 +89,34 @@ export default function Home() {
                 {n === 5 && "Redes GAN"}
                 {n === 6 && "Futuro GenAI"}
               </span>
+            </Link>
+          ))}
+        </div>
+      </div>
+
+      <div className="mt-6 bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
+        <h2 className="text-lg font-bold text-[#1e3a5f] mb-4">Acceso rápido — Datos Estructurados</h2>
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+          {[
+            [1, "Series Temporales"],
+            [2, "Modelos ARIMA"],
+            [3, "Modelos SARIMA"],
+            [4, "Regresión ST"],
+            [5, "Prophet"],
+            [6, "GARCH/ARCH"],
+            [7, "Redes Neuronales"],
+            [8, "Recomendadores"],
+            [9, "VaR y ES"],
+          ].map(([n, label]) => (
+            <Link
+              key={n}
+              href={`/datos-estructurados/ud${n}`}
+              className="flex items-center gap-3 p-3 rounded-lg border border-slate-100 hover:border-indigo-300 hover:bg-indigo-50 transition-all group"
+            >
+              <span className="bg-indigo-600 text-white text-sm font-bold w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0">
+                {n}
+              </span>
+              <span className="text-sm font-medium text-slate-700 group-hover:text-indigo-700">{label}</span>
             </Link>
           ))}
         </div>

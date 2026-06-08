@@ -6,6 +6,7 @@ export default function TestUD1() {
       udNum={1}
       udTitle="Fundamentos del Procesamiento del Lenguaje Natural"
       backHref="/datos-no-estructurados"
+      backLabel="Datos No Estructurados"
       contentHref="/datos-no-estructurados/ud1"
       nextTestHref="/datos-no-estructurados/ud2/test"
     />

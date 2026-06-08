@@ -4,15 +4,16 @@ interface TestPlaceholderProps {
   udNum: number;
   udTitle: string;
   backHref: string;
+  backLabel?: string;
   contentHref: string;
   nextTestHref?: string;
 }
 
-export default function TestPlaceholder({ udNum, udTitle, backHref, contentHref, nextTestHref }: TestPlaceholderProps) {
+export default function TestPlaceholder({ udNum, udTitle, backHref, backLabel = "Inicio", contentHref, nextTestHref }: TestPlaceholderProps) {
   return (
     <div className="max-w-3xl mx-auto px-4 py-10">
       <div className="mb-6">
-        <Link href="/datos-no-estructurados" className="text-sm text-blue-600 hover:underline">← Datos No Estructurados</Link>
+        <Link href={backHref} className="text-sm text-blue-600 hover:underline">← {backLabel}</Link>
         <div className="flex items-center gap-3 mt-2">
           <span className="bg-green-600 text-white font-bold text-lg w-10 h-10 rounded-full flex items-center justify-center">{udNum}</span>
           <div>
