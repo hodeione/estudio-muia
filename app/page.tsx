@@ -22,11 +22,11 @@ const subjects = [
   {
     id: "calibracion-metricas",
     title: "Calibración y Métricas",
-    subtitle: "Próximamente",
-    status: "soon",
-    color: "bg-slate-400",
-    uds: 0,
-    description: "Contenido en preparación",
+    subtitle: "Evaluación y calibración de modelos de IA",
+    status: "active",
+    color: "bg-teal-600",
+    uds: 6,
+    description: "Métricas de clasificación y regresión, calibración probabilística, validación cruzada, fairness y benchmarks",
   },
 ];
 
@@ -117,6 +117,31 @@ export default function Home() {
                 {n}
               </span>
               <span className="text-sm font-medium text-slate-700 group-hover:text-indigo-700">{label}</span>
+            </Link>
+          ))}
+        </div>
+      </div>
+
+      <div className="mt-6 bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
+        <h2 className="text-lg font-bold text-[#1e3a5f] mb-4">Acceso rápido — Calibración y Métricas</h2>
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+          {[
+            [1, "XAI y Propiedades"],
+            [2, "Estabilidad y Sesgos"],
+            [3, "Intro Métricas ML"],
+            [4, "Métricas Regresión"],
+            [5, "Métricas Clasificación"],
+            [6, "Datos Balanceados"],
+          ].map(([n, label]) => (
+            <Link
+              key={n}
+              href={`/calibracion-metricas/ud${n}`}
+              className="flex items-center gap-3 p-3 rounded-lg border border-slate-100 hover:border-teal-300 hover:bg-teal-50 transition-all group"
+            >
+              <span className="bg-teal-600 text-white text-sm font-bold w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0">
+                {n}
+              </span>
+              <span className="text-sm font-medium text-slate-700 group-hover:text-teal-700">{label}</span>
             </Link>
           ))}
         </div>
